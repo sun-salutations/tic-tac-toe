@@ -1,11 +1,11 @@
 from files.player import Player
 from collections import defaultdict
 
+
 class Game:
     def __init__(self):
-        self.board = [[1, 2, 3],[4,5,6],[7,8,9]]
+        self.board = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
         self.selected_moves = defaultdict(int)
-        self.started = False
 
     def game_set_up(self):
         print("Welcome to your favorite game, Tic,Tac,Toe!")
@@ -27,27 +27,15 @@ class Game:
         return p1, p2
 
     def print_board(self):
-        #relies on gameboard boolean 'started' to show empty or non-empty
         print("Here's the current board:")
-        # if self.started == False:
-        #     # print("     |      |   ")
-        #     # print(" ----  ----  ----")
-        #     # print("     |      |   ")
-        #     # print(" ----  ----  ----")
-        #     # print("     |      |   ")
-        # else:
         print(" ", self.board[0][0], " | ", self.board[0][1], " | ", self.board[0][2])
         print(" ----  ----  ----")
         print(" ", self.board[1][0], " | ", self.board[1][1], " | ", self.board[1][2])
         print(" ----  ----  ----")
-        print(" ", self.board[2][0], " | ", self.board[2][1], " | ", self.board[2][2])
-
-        print('\n')
+        print(" ", self.board[2][0], " | ", self.board[2][1], " | ", self.board[2][2], "\n")
         return
 
-
     def instructions(self):
-
         print("In this game of tic-tac-toe, each player will take turns choosing a spot on the board.")
         print("Each spot on the board can only be claimed once, first-come-first-serve.")
         print("We've labeled each position of the board with numbers to make it easier for you to select which position you want.")
@@ -58,7 +46,7 @@ class Game:
         print(" ----   ----   ----")
         print("  7   |   8   |  9 ")
 
-        print("When it's your turn, select one of available spots!\n")
+        print("When it's your turn, select one of the available spots!\n")
         return
 
     def check_board(self, move):
@@ -71,86 +59,45 @@ class Game:
             print("That was an invalid move because your move is not a legal option")
             return False
 
-
     def update_board(self, move, whos_turn):
-        adjusted_move = int(move)-1 #bc of zero indexing but to make it easier for users, we start at 1
+        adjusted_move = int(move) - 1  # bc of zero indexing but to make it easier for users, we start at 1
         row = adjusted_move // 3
         position = adjusted_move % 3
 
-        #update the board array
+        # update the board array
         if whos_turn == 1:
             self.board[row][position] = 'X'
         else:
             self.board[row][position] = 'O'
 
-        #update the dictionary - do i need both? i guess the array is more for printing and the dictionary is to quickly see if claimed
+        # update the dictionary - do i need both? i guess the array is more for printing and the dictionary is to quickly see if claimed
         self.selected_moves[move] = whos_turn
 
-
     def game_over(self):
-         if self.started == True: #need indicator because otherwise, the empty board is the same
-            for i in range(0,2):
-                if self.board[0][i] == self.board[1][i] == self.board[2][i]:
-                    #all the same column
-                    if self.board[0][i] == 'X':
-                        return (True, 1)
-                    else:
-                        return (True, 2)
-                if self.board[i][0] == self.board[i][1] == self.board[i][2]:
-                    #all the same row
-                    if self.board[i][0] == 'X':
-                        return (True, 1)
-                    else:
-                        return (True, 2)
-
-            #diagonal
-            if self.board[0][0] == self.board[1][1] == self.board[2][2]:
-                if self.board[0][0] == 'X':
+        for i in range(0,2):
+            if self.board[0][i] == self.board[1][i] == self.board[2][i]:
+                # all the same column
+                if self.board[0][i] == 'X':
                     return (True, 1)
                 else:
                     return (True, 2)
-
-            #diagonal
-            elif self.board[0][2] == self.board[1][1] == self.board[2][0]:
-                if self.board[0][2] == 'X':
-                    return (True, 1)
+            if self.board[i][0] == self.board[i][1] == self.board[i][2]:
+                # all the same row
+                if self.board[i][0] == 'X':
+                   return (True, 1)
                 else:
-                    return (True, 2)
+                   return (True, 2)
+        # diagonal
+        if self.board[0][0] == self.board[1][1] == self.board[2][2]:
+            if self.board[0][0] == 'X':
+                return (True, 1)
             else:
-                return (False,0)
-
-
-         else:
-            return (False,0)
-
-
-
-# checks if there's the same row, column or diagonal as well
-# returns: Winner (player 1 or 2)
-#
-# if self.started == True: #need indicator because otherwise, the empty board is the same
-#     for i in range(0, 2):
-#         #all the same column
-#         if self.selected_moves[0 + i] == self.selected_moves[3 + i] == self.selected_moves[6 + i]:
-#             if self.selected_moves[0 + i] == 'X':
-#                 return (True, 1)
-#             else:
-#                 return (True, 2)
-#     #all the same row
-#     if self.selected_moves[0] == self.selected_moves[1] == self.selected_moves[2]:
-#         if self.selected_moves[0] == 'X':
-#             return (True, 1)
-#         else:
-#             return (True, 2)
-#     if self.selected_moves[3] == self.selected_moves[4] == self.selected_moves[5]:
-#         if self.selected_moves[3] == 'X':
-#             return (True, 1)
-#         else:
-#             return (True, 2)
-#     if self.selected_moves[6] == self.selected_moves[7] == self.selected_moves[8]:
-#         if self.selected_moves[6] == 'X':
-#             return (True, 1)
-#         else:
-#             return (True, 2)
-# else:
-#     return (False,0)
+                return (True, 2)
+        # diagonal
+        elif self.board[0][2] == self.board[1][1] == self.board[2][0]:
+            if self.board[0][2] == 'X':
+                return (True, 1)
+            else:
+                return (True, 2)
+        else:
+            return (False, 0)
